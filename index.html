@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌺 沖繩 8天7夜</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ocean: #0B7B6B;
+    --ocean-light: #E0F4F0;
+    --ocean-mid: #1D9E75;
+    --sand: #FDF8F2;
+    --ink: #1A1A1A;
+    --muted: #6B7280;
+    --border: rgba(0,0,0,0.08);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--ocean);
+    color: #fff;
+    padding: 48px 20px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 120%, rgba(255,255,255,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-wave {
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 32px;
+    background: var(--sand);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .hero-emoji { font-size: 48px; display: block; margin-bottom: 12px; animation: bob 3s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  .hero h1 { font-size: clamp(24px, 6vw, 36px); font-weight: 700; letter-spacing: 0.02em; }
+  .hero-date { margin-top: 8px; font-size: 14px; opacity: 0.8; letter-spacing: 0.08em; }
+  .hero-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; margin-bottom: 32px; }
+  .pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ── Day tabs ── */
+  .tabs-wrap {
+    padding: 24px 16px 0;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .tabs-label { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .tab {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab:hover { border-color: var(--ocean-mid); }
+  .tab.active {
+    background: var(--ocean-mid);
+    border-color: var(--ocean-mid);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(29,158,117,0.3);
+    transform: translateY(-1px);
+  }
+  .tab-day { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+  .tab-date { font-size: 10px; opacity: 0.7; margin-top: 2px; }
+
+  /* ── Day card ── */
+  .card-wrap {
+    max-width: 540px;
+    margin: 16px auto 32px;
+    padding: 0 16px;
+  }
+  .day-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    overflow: hidden;
+    animation: fadeUp 0.25s ease;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  .card-header {
+    padding: 20px 20px 16px;
+    position: relative;
+  }
+  .card-header-top { display: flex; align-items: flex-start; gap: 14px; }
+  .day-badge {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.4);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .day-badge-num { font-size: 16px; font-weight: 700; line-height: 1; }
+  .day-badge-label { font-size: 9px; opacity: 0.8; }
+  .card-header-text { flex: 1; }
+  .card-title { font-size: 17px; font-weight: 700; color: #fff; line-height: 1.3; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 3px; }
+  .card-hotel {
+    margin-top: 12px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.95);
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ── Timeline ── */
+  .timeline { padding: 16px 20px 20px; }
+  .tl-item { display: flex; gap: 0; margin-bottom: 0; }
+  .tl-left {
+    display: flex; flex-direction: column; align-items: center;
+    width: 60px; flex-shrink: 0;
+  }
+  .tl-time { font-size: 11px; color: var(--muted); font-weight: 500; padding-top: 2px; }
+  .tl-dot-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .tl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin: 6px 0 0;
+    flex-shrink: 0;
+  }
+  .tl-line { width: 2px; flex: 1; min-height: 20px; background: var(--border); margin-top: 2px; }
+  .tl-right { flex: 1; padding: 2px 0 20px 12px; }
+  .tl-item:last-child .tl-right { padding-bottom: 4px; }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-row { display: flex; align-items: flex-start; gap: 8px; }
+  .tl-icon { font-size: 16px; line-height: 1.4; flex-shrink: 0; }
+  .tl-label { font-size: 14px; color: var(--ink); line-height: 1.5; }
+  .tl-note { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+  /* ── Nav buttons ── */
+  .card-nav {
+    display: flex; gap: 8px;
+    padding: 0 16px 16px;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .nav-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    color: var(--ink);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn:hover { border-color: var(--ocean-mid); color: var(--ocean-mid); }
+  .nav-btn.primary {
+    background: var(--ocean-mid);
+    border-color: var(--ocean-mid);
+    color: #fff;
+  }
+  .nav-btn.primary:hover { background: var(--ocean); border-color: var(--ocean); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-emoji { animation: none; }
+    .day-card { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-emoji">🌺</span>
+  <h1>沖繩 8天7夜</h1>
+  <p class="hero-date">2026 / 6 / 29（一）－ 7 / 6（一）</p>
+  <div class="hero-pills">
+    <span class="pill">✈️ 虎航 IT232 去程</span>
+    <span class="pill">✈️ 星宇 JX303 回程</span>
+    <span class="pill">🏨 3間飯店</span>
+    <span class="pill">🚗 自駕 Day 4–6</span>
+  </div>
+  <div class="hero-wave"></div>
+</div>
+
+<div class="tabs-wrap">
+  <p class="tabs-label">選擇日期</p>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="card-wrap">
+  <div class="day-card" id="dayCard"></div>
+</div>
+<div class="card-nav" id="cardNav"></div>
+
+<div class="footer">用愛製作 🌊 旅途平安順利</div>
+
+<script>
+const DAYS = [
+  {
+    day:1, date:"6/29 一", title:"啟程沖繩！深夜宵夜",
+    hotel:"那霸蒙特利拉蘇瑞酒店", color:"#0B7B6B",
+    items:[
+      {time:"14:30", icon:"✈️", label:"台中 → 桃園國際機場"},
+      {time:"18:30", icon:"✈️", label:"虎航 IT232 起飛", note:"桃園 18:30 → 那霸 20:50"},
+      {time:"21:10", icon:"🚋", label:"單軌電車：空港站 → 縣廳前站"},
+      {time:"21:30", icon:"🏨", label:"那霸蒙特利拉蘇瑞酒店 Check-in"},
+      {time:"22:00", icon:"🍜", label:"宵夜：一蘭拉麵 / 便利商店"}
+    ]
+  },
+  {
+    day:2, date:"6/30 二", title:"市區文化巡禮 → 燒肉王",
+    hotel:"那霸蒙特利拉蘇瑞酒店", color:"#185FA5",
+    items:[
+      {time:"09:00", icon:"🌊", label:"波上宮 & 波之上海灘", note:"Fun Pass 1"},
+      {time:"10:30", icon:"⛩️", label:"達摩宮（西來院達磨寺）", note:"計程車約15分，車資約1,500–1,800日圓"},
+      {time:"11:30", icon:"🍜", label:"午餐：首里麵", note:"步行1分鐘即達"},
+      {time:"12:30", icon:"🏯", label:"首里城 & 金城町石疊道", note:"Fun Pass 2"},
+      {time:"15:30", icon:"🛒", label:"牧志市場、平和通逛街"},
+      {time:"18:15", icon:"🥩", label:"晚餐：焼肉きんぐ 那覇久茂地店", note:"90分鐘燒肉"},
+      {time:"20:10", icon:"🚶", label:"散步回國際通飯店"}
+    ]
+  },
+  {
+    day:3, date:"7/01 三", title:"南部絕景巴士遊 → RYUBO百貨",
+    hotel:"那霸蒙特利拉蘇瑞酒店", color:"#854F0B",
+    items:[
+      {time:"07:30", icon:"⏰", label:"起床準備"},
+      {time:"08:40", icon:"🚌", label:"縣廳前 BLUE SEAL 門口集合上車"},
+      {time:"09:40", icon:"🌁", label:"NIRAIKANAI 大橋", note:"車窗欣賞壯麗海景"},
+      {time:"09:50", icon:"🏝️", label:"知念岬公園", note:"270度無敵太平洋，50分鐘"},
+      {time:"11:00", icon:"🦋", label:"沖繩世界文化王國", note:"玉泉洞鐘乳石，2小時"},
+      {time:"13:40", icon:"🐟", label:"午餐：糸滿海鮮市場", note:"大啖生魚片/烤大蝦"},
+      {time:"14:55", icon:"✈️", label:"瀬長島 Umikaji Terrace", note:"沖繩小希臘看飛機，2小時"},
+      {time:"17:30", icon:"🛍️", label:"RYUBO 百貨", note:"2F LOFT、無印良品、8F 寶可夢中心"},
+      {time:"19:00", icon:"🍜", label:"晚餐：通堂拉麵"}
+    ]
+  },
+  {
+    day:4, date:"7/02 四", title:"自駕北上 → 萬座毛 → 鳳梨園",
+    hotel:"里耶塔中山旅館", color:"#533CB7",
+    items:[
+      {time:"09:00", icon:"🚗", label:"租車公司交車、檢查車況"},
+      {time:"09:40", icon:"🍔", label:"退房，A&W 買早餐車上吃"},
+      {time:"10:15", icon:"🛣️", label:"開車前往中部萬座毛", note:"車程約1小時15分"},
+      {time:"11:30", icon:"🍱", label:"午餐：沖繩豬排 Shimabutaya 前兼久店"},
+      {time:"12:30", icon:"🌊", label:"萬座毛", note:"欣賞象鼻海蝕巨岩"},
+      {time:"14:10", icon:"🍍", label:"名護鳳梨園", note:"Fun Pass 3，搭鳳梨火車，2小時"},
+      {time:"16:10", icon:"🏨", label:"里耶塔中山旅館 Check-in", note:"受付番号: 2095"},
+      {time:"18:30", icon:"🥩", label:"晚餐：暖暮拉麵 名護店", note:"車程約25–30分"},
+      {time:"20:30", icon:"🛒", label:"MaxValu 名護店大採購", note:"24小時，零食水果大補貨"}
+    ]
+  },
+  {
+    day:5, date:"7/03 五", title:"古宇利蝦蝦飯 → 美麗海水族館",
+    hotel:"里耶塔中山旅館", color:"#0F6E56",
+    items:[
+      {time:"09:00", icon:"🍙", label:"早餐：pork tamago 本部町店"},
+      {time:"09:45", icon:"🚗", label:"開車前往古宇利島", note:"車程約45分鐘"},
+      {time:"10:30", icon:"🦐", label:"古宇利大橋 → 海灘漫步 → KOURI SHRIMP 蝦蝦飯", note:"11點開門即去點餐"},
+      {time:"12:35", icon:"🚗", label:"前往美麗海水族館", note:"車程約35分鐘"},
+      {time:"13:20", icon:"🐋", label:"美麗海水族館", note:"Fun Pass 4，鯨鯊大水槽＋海豚秀"},
+      {time:"16:30", icon:"🚗", label:"返回名護市區", note:"車程約30分鐘"},
+      {time:"17:00", icon:"🍜", label:"晚餐：暖暮拉麵 名護店"},
+      {time:"18:30", icon:"🛒", label:"名護唐吉訶德免稅大採購", note:"藥妝與土產"}
+    ]
+  },
+  {
+    day:6, date:"7/04 六", title:"永旺來客夢 → 美國村日落龍蝦",
+    hotel:"那霸格蘭康索爾飯店", color:"#993C1D",
+    items:[
+      {time:"09:30", icon:"🏨", label:"退房、買簡單早餐車上吃"},
+      {time:"10:00", icon:"🚗", label:"開車南下永旺夢樂城", note:"車程約45分鐘"},
+      {time:"10:45", icon:"🛍️", label:"AEON MALL 沖繩來客夢", note:"購物＋美食街午餐"},
+      {time:"14:40", icon:"🚗", label:"前往美國村", note:"車程約15–20分鐘"},
+      {time:"15:00", icon:"🌅", label:"美國村漫步", note:"Sunset Walk 步道賞絕美夕陽"},
+      {time:"18:30", icon:"🦞", label:"晚餐：Red Lobster 沖繩北谷店", note:"海景龍蝦大餐，訂位 #68184"},
+      {time:"20:00", icon:"🚗", label:"還車 → 返回那霸國際通"},
+      {time:"21:00", icon:"🏨", label:"那霸格蘭康索爾飯店 Check-in"}
+    ]
+  },
+  {
+    day:7, date:"7/05 日", title:"PARCO海景 → DFS精品 → 屋台村",
+    hotel:"那霸格蘭康索爾飯店", color:"#3B6D11",
+    items:[
+      {time:"09:00", icon:"🍙", label:"早餐：國際通散步外帶豬肉蛋飯糰"},
+      {time:"10:30", icon:"🏬", label:"PARCO CITY", note:"搭計程車約15–20分，海景美食街午餐"},
+      {time:"14:30", icon:"🚕", label:"搭計程車前往 DFS 免稅店", note:"那霸新都心，約15分"},
+      {time:"14:50", icon:"💎", label:"沖繩免稅店 DFS Galleria", note:"精品免稅"},
+      {time:"16:30", icon:"🎁", label:"國際通採買伴手禮", note:"紅芋塔等大補貨"},
+      {time:"18:30", icon:"🍺", label:"★ 國際通屋台村", note:"露天居酒屋 / Orion 生啤"}
+    ]
+  },
+  {
+    day:8, date:"7/06 一", title:"夢幻早午餐 → 機場最後衝刺",
+    hotel:"返抵台灣 🏠", color:"#993556",
+    items:[
+      {time:"08:30", icon:"🧳", label:"起床，最後行李打包清點"},
+      {time:"09:30", icon:"🏨", label:"辦理退房，大行李箱寄放櫃檯"},
+      {time:"09:40", icon:"☕", label:"Better Girl 夢幻早午餐", note:"步行3–5分，工業風空間西式早午餐盤"},
+      {time:"11:00", icon:"🧳", label:"回飯店取行李"},
+      {time:"12:00", icon:"✈️", label:"星宇航空辦理登機 & 托運"},
+      {time:"12:30", icon:"🍦", label:"那霸機場國內線大廳最後大補貨", note:"手工年輪蛋糕、Blue Seal 冰淇淋"},
+      {time:"14:45", icon:"✈️", label:"星宇 JX303 起飛返台", note:"那霸 → 台中清泉崗，17:45 抵達"}
+    ]
+  }
+];
+
+let current = 0;
+
+function renderTabs() {
+  const wrap = document.getElementById('tabs');
+  wrap.innerHTML = DAYS.map((d, i) => `
+    <button class="tab ${i===current?'active':''}" onclick="goDay(${i})" style="${i===current?'background:'+d.color+';border-color:'+d.color:''}">
+      <div class="tab-day">DAY ${d.day}</div>
+      <div class="tab-date">${d.date}</div>
+    </button>
+  `).join('');
+}
+
+function renderCard() {
+  const d = DAYS[current];
+  const tl = d.items.map((item, i) => `
+    <div class="tl-item">
+      <div class="tl-left">
+        <span class="tl-time">${item.time}</span>
+      </div>
+      <div class="tl-dot-wrap">
+        <div class="tl-dot" style="background:${d.color}"></div>
+        <div class="tl-line" style="background:${d.color}22"></div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-row">
+          <span class="tl-icon">${item.icon}</span>
+          <span class="tl-label">${item.label}</span>
+        </div>
+        ${item.note ? `<div class="tl-note">${item.note}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('dayCard').innerHTML = `
+    <div class="card-header" style="background:${d.color}">
+      <div class="card-header-top">
+        <div class="day-badge">
+          <span class="day-badge-num">${d.day}</span>
+          <span class="day-badge-label">DAY</span>
+        </div>
+        <div class="card-header-text">
+          <div class="card-title">${d.title}</div>
+          <div class="card-date">${d.date}</div>
+        </div>
+      </div>
+      <div class="card-hotel">🏨 ${d.hotel}</div>
+    </div>
+    <div class="timeline">${tl}</div>
+  `;
+
+  const nav = document.getElementById('cardNav');
+  let btns = '';
+  if (current > 0) btns += `<button class="nav-btn" onclick="goDay(${current-1})">◀ DAY ${current}</button>`;
+  if (current < DAYS.length-1) btns += `<button class="nav-btn primary" onclick="goDay(${current+1})">DAY ${current+2} ▶</button>`;
+  nav.innerHTML = btns;
+}
+
+function goDay(i) {
+  current = i;
+  renderTabs();
+  renderCard();
+  document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+renderTabs();
+renderCard();
+</script>
+</body>
+</html>
