@@ -1,2 +1,2 @@
-Okinawa 2016 travel
+Okinawa 2026 travel
 
